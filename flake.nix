@@ -17,7 +17,7 @@
 					{ pkgs, ... }:
 					{
 						nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
-						boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+						boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-hardened;
 
 						# Binary cache is auto-configured via nixConfig in flake.nix,
 						# no additional binary cache config is needed.
