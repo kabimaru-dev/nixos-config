@@ -33,7 +33,7 @@
 
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
-  boot.kernelPackages = inputs.nix-cachyos-kernel.legacyPackages.x86_64-linux.linuxPackages-cachyos-hardened;
+  # boot.kernelPackages = inputs.nix-cachyos-kernel.legacyPackages.x86_64-linux.linuxPackages-cachyos-hardened;
 
   nix.settings.max-jobs = "auto";
   programs.ccache.enable = true;
