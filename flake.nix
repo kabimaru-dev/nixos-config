@@ -1,22 +1,33 @@
 {
-    inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-        nixpkgsveryold.url = "github:NixOS/nixpkgs/nixos-24.05";
-    };
+	inputs = {
+		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+		nixpkgsold.url = "github:NixOS/nixpkgs/nixos-25.11";
+		nixpkgsveryold.url = "github:NixOS/nixpkgs/nixos-24.05";
+		nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+	};
 
-    outputs = { self, nixpkgs, nixpkgsveryold }:
-        let
-            pkgs = nixpkgs.legacyPackages.x86_64-linux;
-            pkgsold = nixpkgsveryold.legacyPackages.x86_64-linux;
-        in 
-        {
-            packages.x86_64-linux.hello = pkgs.hello;
-            packages.x86_64-linux.default = pkgs.hello;
+	outputs = { nix-cachyos-kernel, nixpkgs, ... } @ inputs:
+	{
+		nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+			system = "x86_64-linux";
+			specialArgs = { inherit inputs; };
+			modules = [
+				(
+					{ pkgs, ... }:
+					{
+						nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
+						# boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
-            devShells.x86_64-linux.default = pkgs.mkShell {
-                buildInputs = with pkgs; [
-                    pkgs.neovim pkgsold.krita
-                ];
-            };
-        };
+						# Binary cache is auto-configured via nixConfig in flake.nix,
+						# no additional binary cache config is needed.
+
+						# ... your other configs
+						
+					}
+					
+				)
+				./configuration.nix
+			];
+		};
+	};
 }

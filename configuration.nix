@@ -2,46 +2,66 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 {
-  # compile kernel with SELinux support - but also support for other LSM modules
-  boot.kernelPatches = [ {
-    name = "selinux-config";
-    patch = null;
-    extraConfig = ''
-          SECURITY_SELINUX y
-          SECURITY_SELINUX_BOOTPARAM n
-          # SECURITY_SELINUX_DISABLE n
-          SECURITY_SELINUX_DEVELOP y
-          SECURITY_SELINUX_AVC_STATS y
-          # SECURITY_SELINUX_CHECKREQPROT_VALUE 0
-          DEFAULT_SECURITY_SELINUX n
-        '';
-  } ];
+  # # compile kernel with SELinux support - but also support for other LSM modules
+  # boot.kernelPatches = [ {
+  #   name = "selinux-config";
+  #   patch = null;
+  #   extraConfig = ''
+  #         SECURITY_SELINUX y
+  #         SECURITY_SELINUX_BOOTPARAM n
+  #         # SECURITY_SELINUX_DISABLE n
+  #         SECURITY_SELINUX_DEVELOP y
+  #         SECURITY_SELINUX_AVC_STATS y
+  #         # SECURITY_SELINUX_CHECKREQPROT_VALUE 0
+  #         DEFAULT_SECURITY_SELINUX n
+  #       '';
+  # } ];
 
-  boot.kernelModules = [ "selinux" ];
+  # boot.kernelModules = [ "selinux" ];
 
-  security.lsm = [ "selinux" ];
+  # security.lsm = [ "selinux" ];
 
-  # build systemd with SELinux support so it loads policy at boot and supports file labelling
-  systemd.package = pkgs.systemd.override { withSelinux = true; };
-  
-  # policycoreutils is for load_policy, fixfiles, setfiles, setsebool, semodile, and sestatus.
-  environment.systemPackages = with pkgs; [ 
-    policycoreutils
-    unstable.go
-  ];
+  # # build systemd with SELinux support so it loads policy at boot and supports file labelling
+  # systemd.package = pkgs.systemd.override { withSelinux = true; };
 
+  # boot.kernelPackages = inputs.nixpkgs.legacyPackages.${pkgs.system}.linux-cachyos-hardened;
+  # hardware.deviceTree.enable = false;
+ 
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest; linux-cachyos-hardened
+
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+
+  boot.kernelPackages = inputs.nix-cachyos-kernel.legacyPackages.x86_64-linux.linuxPackages-cachyos-hardened;
 
   nix.settings.max-jobs = "auto";
   programs.ccache.enable = true;
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ]; # Flakes  
 
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ]; # Flakes  
+  # policycoreutils is for load_policy, fixfiles, setfiles, setsebool, semodile, and sestatus.
+  environment.systemPackages = with pkgs; [ 
+    policycoreutils
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.krita
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt5.full
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.full
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.libglvnd
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qtcreator
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtbase
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtwebengine
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qttools
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtdeclarative
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qt5compat
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtwebchannel
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtpositioning
+    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.wayland
+  ];
 
   boot.loader.systemd-boot.enable = true; # Use the systemd-boot EFI boot loader.
   boot.loader.efi.canTouchEfiVariables = true;
@@ -107,7 +127,6 @@
       swaylock
       rofi
       xdg-desktop-portal-wlr
-      wayland
 
 
 
