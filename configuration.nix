@@ -1,28 +1,9 @@
-{ config, lib, pkgs, inputs, ... }:
+{ inputs, lib, config, pkgs, ... }: 
 {
-  nix.settings.max-jobs = "auto";
-  programs.ccache.enable = true;
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   imports = [
     ./hardware-configuration.nix
-  ];
-
-  environment.systemPackages = with pkgs; [ 
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.krita
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt5.full
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.full
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.libglvnd
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qtcreator
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtbase
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtwebengine
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qttools
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtdeclarative
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qt5compat
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtwebchannel
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.qt6.qtpositioning
-    inputs.nixpkgsveryold.legacyPackages.${pkgs.system}.wayland
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -32,76 +13,19 @@
   
   time.timeZone = "Europe/Kyiv";
 
-  services.xserver.enable = true;
-  services.xserver.layout = "us, ru";
-  services.xserver.xkbOptions = "grp:alt_shift_toggle"; # Bug Bug Bug Bug Bug Bug Bug
-  services.xserver.libinput.enable = true;
+  # Enter keyboard layout
+  services.xserver.layout = "us";
+  services.xserver.xkbVariant = "altgr-intl";
 
-  services.xserver.desktopManager.gnome = {
-    enable = true;
-  };
-
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-
-  virtualisation.docker.enable = true;
-
+  # Define user accounts
   users.users.Gabimaru = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" ];
     packages = with pkgs; [
-      wl-clipboard
-      mako
-      swaybg
-      swayidle
-      swaylock
-      rofi
-      xdg-desktop-portal-wlr
-
-      
-      networkmanager
-
-      greetd
-      tuigreet
-
-
-      mesa
-
-      foot
-      xterm 
-
-      tor-browser
-      firefox
-
       fastfetch
-      brightnessctl 
-      wget
-      gparted
-
-      ffmpeg
-      mpv
-      
-      git
-      gh
-      vscodium
-
-
-      bitwarden-cli
-      rPackages.keyring
-      secretspec
-
-      telegram-desktop
-
-      gnumake
-      docker
-      nodejs_22
-      yarn
-      pavucontrol
     ];
-    
   };
+<<<<<<< HEAD
 
   users.extraGroups.docker.members = [ "username-with-access-to-socket" ];
   virtualisation.docker.storageDriver = "btrfs";
@@ -150,6 +74,7 @@
     };
   };
 <<<<<<< HEAD
+<<<<<<< HEAD
   # programs.mtr.enable = true; # Some programs need SUID wrappers, can be configured further or are
   # programs.gnupg.agent = {    # started in user sessions.
 <<<<<<< HEAD
@@ -178,5 +103,8 @@
 =======
 >>>>>>> 10717e1 (fifth)
 
+=======
+  
+>>>>>>> 99bb00b (sixth)
   system.stateVersion = "26.05";
 }

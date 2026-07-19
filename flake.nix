@@ -1,8 +1,8 @@
 {
 	inputs = {
-		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-		nixpkgsold.url = "github:NixOS/nixpkgs/nixos-25.11";
-		nixpkgsveryold.url = "github:NixOS/nixpkgs/nixos-24.05";
+		# nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+		# nixpkgsold.url = "github:NixOS/nixpkgs/nixos-25.11";
+		# nixpkgsveryold.url = "github:NixOS/nixpkgs/nixos-24.05";
 		nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 	};
 
