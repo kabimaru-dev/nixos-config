@@ -13,38 +13,41 @@
 
   networking.networkmanager.enable = true;
 
-  services.pipewire = {
+  services.pipewire.enable = true;
+  services.pipewire.pulse.enable = true;
+
+  programs.sway.enable = true;
+  programs.sway.wrapperFeatures.gtk = true;
+
+  services.greetd = {
     enable = true;
-    pulse.enable = true;
+    settings.default_session = {                                                  
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd GNOME";
+      user = "greeter";                                                  
+    };
   };
+
+  services.desktopManager.gnome.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   users.users.Gabimaru = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [
-      # Window Managers
-      sway
-
       # Software Environment
       git gh vscodium
+
+      # Linux Environment
+      fastfetch
 
       # Browsers
       firefox tor-browser 
 
-      # Login
-      greetd tuigreet
-
       # Drivers
       mesa
 
-      # Terminals
-      foot
-
       # Volume
       pavucontrol
-      
-      # Brightness
-      brightnessctl
     ];
   };
 
