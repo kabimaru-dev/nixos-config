@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  nixpkgs.config.allowUnfree = true;
+  # nixpkgs.config.allowUnfree = true;
 
   imports = [
     ./hardware-configuration.nix
@@ -48,13 +48,13 @@
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       packages = with pkgs; [
-        git gh python3 python313Packages.pip pipx lapce android-tools                   # Develop
-        androidStudioPackages.stable clang                                              # 
+        git gh /* python3 python313Packages.pip pipx */ lapce nil android-tools         # Develop
+        #androidStudioPackages.stable clang                                             # 
         
         fastfetch gparted pavucontrol tree                                              # Linux
         mesa                                                                            # Drivers
         firefox tor-browser                                                             # Browsers
-        telegram-desktop obs-studio                                                     # etc
+        telegram-desktop obs-studio krita                                               # etc
       ];
     };
   };
