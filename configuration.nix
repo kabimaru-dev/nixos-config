@@ -40,7 +40,7 @@
     };
 
     desktopManager.gnome.enable = true;
-    gnome.gnome-keyring.enable = true;
+    # gnome.gnome-keyring.enable = true;
   };
 
   users.users = {
@@ -54,6 +54,8 @@
         fastfetch gparted pavucontrol tree                                              # Linux
         mesa                                                                            # Drivers
         firefox tor-browser                                                             # Browsers
+        
+        
         telegram-desktop obs-studio krita                                               # etc
       ];
     };
@@ -64,6 +66,39 @@
     enable = true;
     wrapperFeatures.gtk = true;
   };
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than 14d";
+    };
+    # settings = {
+    #   let GB = 1024 * 1024 * 1024; your-default-storage = 2500 * GB; in 
+      
+    #   # 60%2500GB
+    # };
+  };
+  
+  
+  # # Automatic Garbage Collection
+  # nix = {
+  #   gc = {
+  #     automatic = true;
+  #     dates = "daily";
+  #     options = "--delete-older-than 14d";
+  #   };
+  #   # settings = {
+      
+  #   #   minimum-GB = 10;
+  #   #   maximum-GB = 20;
+  #   #   min-free = 1024 * 1024 * 1024;
+  #   #   max-free = 5 * 1024 * 1024 * 1024;
+  #   # };
+  # };
+
+  # let myName = "Gabimaru"; in 
+  # let myNameAndOld = "${myName} ${toString 24}"; in
+  #     "Hello ${myNameAndOld} years old, you are the best on your OS!!!"
 
   system.stateVersion = "25.11";
 }
