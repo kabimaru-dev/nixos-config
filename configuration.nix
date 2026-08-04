@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
-
+let
+  cfg = config.custom.services.gnome;
+in
 {
-  # nixpkgs.config.allowUnfree = true;
+  
+  nixpkgs.config.allowUnfree = true;
+  # security.pam.services.Gabimaru.enableGnomeKeyring = false;
 
   imports = [
     ./hardware-configuration.nix
@@ -15,7 +19,16 @@
   };
 
   networking.networkmanager.enable = true;
-
+  
+  # options.custom.services.gnome = {
+  #   enable = lib.mkEnableOption "Setup Gnome";
+  #   num-workspaces = lib.mkOption {
+  #     type = lib.types.int;
+  #     default = 7;
+  #     description = "Number of Gnome workspaces";
+  #   };
+  # };
+  
   services = {
     pipewire = {
       enable = true;
@@ -49,14 +62,14 @@
       extraGroups = [ "wheel" ];
       packages = with pkgs; [
         git gh /* python3 python313Packages.pip pipx */ lapce nil android-tools         # Develop
-        #androidStudioPackages.stable clang                                             # 
+        /* androidStudioPackages.stable clang */ gcc                                    # 
         
-        fastfetch gparted pavucontrol tree                                              # Linux
+        fastfetch gparted pavucontrol tree _7zip-zstd zip unzip                         # Linux
         mesa                                                                            # Drivers
         firefox tor-browser                                                             # Browsers
         
         
-        telegram-desktop obs-studio krita                                               # etc
+        telegram-desktop obs-studio krita discord                                       # etc
       ];
     };
   };
@@ -100,5 +113,5 @@
   # let myNameAndOld = "${myName} ${toString 24}"; in
   #     "Hello ${myNameAndOld} years old, you are the best on your OS!!!"
 
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
 }
