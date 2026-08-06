@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-let
-  cfg = config.custom.services.gnome;
-in
 {   
   nixpkgs.config.allowUnfree = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
@@ -59,17 +56,17 @@ in
     Gabimaru = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      packages = with pkgs; [ cmake vulkan-headers vulkan-loader
-        git gh /* python3 python313Packages.pip pipx */ lapce nil android-tools           # Develop
-        /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake 
-        vulkan-headers vulkan-loader pkg-config glfw glm
+      packages = with pkgs; [
+        git gh /* python3 python313Packages.pip pipx */ vscodium nil android-tools            # Develop
+        /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake                   #
+        vulkan-headers vulkan-loader pkg-config glfw glm                                      #
+
+        fastfetch gparted pavucontrol tree peazip zip unzip                                   # Linux
+        mesa                                                                                  # Drivers
+        firefox tor-browser                                                                   # Browsers
+
         
-        fastfetch gparted pavucontrol tree peazip zip unzip                               # Linux
-        mesa                                                                              # Drivers
-        firefox tor-browser                                                               # Browsers
-        
-        
-        telegram-desktop obs-studio krita discord                                       # etc
+        telegram-desktop obs-studio krita discord                                             # etc
       ];
     };
   };
@@ -79,39 +76,25 @@ in
     enable = true;
     wrapperFeatures.gtk = true;
   };
+
+  
+  
   nix = {
     gc = {
       automatic = true;
       dates = "daily";
       options = "--delete-older-than 14d";
     };
-    # settings = {
-    #   let GB = 1024 * 1024 * 1024; your-default-storage = 2500 * GB; in 
-      
-    #   # 60%2500GB
-    # };
+    
+    settings = 
+      let GB = 1024 * 1024 * 1024; in # 1GB
+      let total_storage = 175 * GB; in # 175GB
+      let if_forty_percent_free__clean_it = total_storage / 100 * 40; in # 175%*40 = 70GB
+      {
+      # if storage is less than 40% free in total_storage - clean it!
+      min-free = if_forty_percent_free__clean_it;
+    };
   };
-  
-  
-  # # Automatic Garbage Collection
-  # nix = {
-  #   gc = {
-  #     automatic = true;
-  #     dates = "daily";
-  #     options = "--delete-older-than 14d";
-  #   };
-  #   # settings = {
-      
-  #   #   minimum-GB = 10;
-  #   #   maximum-GB = 20;
-  #   #   min-free = 1024 * 1024 * 1024;
-  #   #   max-free = 5 * 1024 * 1024 * 1024;
-  #   # };
-  # };
-
-  # let myName = "Gabimaru"; in 
-  # let myNameAndOld = "${myName} ${toString 24}"; in
-  #     "Hello ${myNameAndOld} years old, you are the best on your OS!!!"
 
   system.stateVersion = "26.05";
 }
