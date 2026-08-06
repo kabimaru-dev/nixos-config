@@ -2,8 +2,7 @@
 let
   cfg = config.custom.services.gnome;
 in
-{
-  
+{   
   nixpkgs.config.allowUnfree = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
 
@@ -60,13 +59,14 @@ in
     Gabimaru = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
-      packages = with pkgs; [
-        git gh /* python3 python313Packages.pip pipx */ lapce nil android-tools         # Develop
-        /* androidStudioPackages.stable clang */ gcc                                    # 
+      packages = with pkgs; [ cmake vulkan-headers vulkan-loader
+        git gh /* python3 python313Packages.pip pipx */ lapce nil android-tools           # Develop
+        /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake 
+        vulkan-headers vulkan-loader pkg-config glfw glm
         
-        fastfetch gparted pavucontrol tree _7zip-zstd zip unzip                         # Linux
-        mesa                                                                            # Drivers
-        firefox tor-browser                                                             # Browsers
+        fastfetch gparted pavucontrol tree peazip zip unzip                               # Linux
+        mesa                                                                              # Drivers
+        firefox tor-browser                                                               # Browsers
         
         
         telegram-desktop obs-studio krita discord                                       # etc
