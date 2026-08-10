@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 {   
   nixpkgs.config.allowUnfree = true;
+  services.flatpak.enable = true;
+  virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
 
   imports = [
@@ -59,14 +61,16 @@
       packages = with pkgs; [
         git gh /* python3 python313Packages.pip pipx */ vscodium nil android-tools            # Develop
         /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake                   #
-        vulkan-headers vulkan-loader pkg-config glfw glm                                      #
+        vulkan-headers vulkan-loader pkg-config glfw glm docker nodejs                        #
 
-        fastfetch gparted pavucontrol tree peazip zip unzip                                   # Linux
+        fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
+        gnome-tweaks                                                                          #
+        
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
 
         
-        telegram-desktop obs-studio krita discord                                             # etc
+        telegram-desktop obs-studio krita discord qbittorrent inkscape                        # etc
       ];
     };
   };
