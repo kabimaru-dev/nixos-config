@@ -1,9 +1,22 @@
 { config, lib, pkgs, ... }:
 {   
   nixpkgs.config.allowUnfree = true;
-  services.flatpak.enable = true;
   virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
+
+  hardware.graphics.enable = true;
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+ hardware.nvidia = {
+    modesetting.enable = true;
+
+    open = false;
+
+    nvidiaSettings = true;
+
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 
   imports = [
     ./hardware-configuration.nix
@@ -17,15 +30,6 @@
   };
 
   networking.networkmanager.enable = true;
-  
-  # options.custom.services.gnome = {
-  #   enable = lib.mkEnableOption "Setup Gnome";
-  #   num-workspaces = lib.mkOption {
-  #     type = lib.types.int;
-  #     default = 7;
-  #     description = "Number of Gnome workspaces";
-  #   };
-  # };
   
   services = {
     pipewire = {
@@ -53,7 +57,7 @@
     desktopManager.gnome.enable = true;
     # gnome.gnome-keyring.enable = true;
   };
-
+  
   users.users = {
     Gabimaru = {
       isNormalUser = true;
@@ -62,15 +66,18 @@
         git gh /* python3 python313Packages.pip pipx */ vscodium nil android-tools            # Develop
         /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake                   #
         vulkan-headers vulkan-loader pkg-config glfw glm docker nodejs                        #
+        wayland-scanner libxcb libX11 libXau libXdmcp libXrandr wayland 
+        wayland-protocols
 
         fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
-        gnome-tweaks                                                                          #
+        gnome-tweaks busybox pciutils
         
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
 
         
-        telegram-desktop obs-studio krita discord qbittorrent inkscape                        # etc
+        telegram-desktop obs-studio krita qbittorrent inkscape element-desktop blender        # etc
+        audacity yt-dlp
       ];
     };
   };
@@ -81,8 +88,6 @@
     wrapperFeatures.gtk = true;
   };
 
-  
-  
   nix = {
     gc = {
       automatic = true;
