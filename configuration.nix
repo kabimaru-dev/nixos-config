@@ -1,22 +1,8 @@
 { config, lib, pkgs, ... }:
 {   
-  nixpkgs.config.allowUnfree = true;
-  virtualisation.docker.enable = true;
+  # nixpkgs.config.allowUnfree = true;
+  # virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
-
-  hardware.graphics.enable = true;
-
-  services.xserver.videoDrivers = [ "nvidia" ];
-
- hardware.nvidia = {
-    modesetting.enable = true;
-
-    open = false;
-
-    nvidiaSettings = true;
-
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-  };
 
   imports = [
     ./hardware-configuration.nix
@@ -67,10 +53,13 @@
         /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake                   #
         vulkan-headers vulkan-loader pkg-config glfw glm docker nodejs                        #
         wayland-scanner libxcb libX11 libXau libXdmcp libXrandr wayland 
-        wayland-protocols
+        wayland-protocols mesa-demos virtualgl virtualglLib vulkan-validation-layers
+        libGL (lib.getDev glfw) libglvnd (lib.getDev libglvnd) glfw3
 
         fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
-        gnome-tweaks busybox pciutils
+        gnome-tweaks busybox pciutils 
+
+
         
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
