@@ -54,7 +54,8 @@
         vulkan-headers vulkan-loader pkg-config glfw glm docker nodejs                        #
         wayland-scanner libxcb libX11 libXau libXdmcp libXrandr wayland 
         wayland-protocols mesa-demos virtualgl virtualglLib vulkan-validation-layers
-        libGL (lib.getDev glfw) libglvnd (lib.getDev libglvnd) glfw3
+        libGL (lib.getDev glfw) libglvnd (lib.getDev libglvnd) glfw3 libgcc gcc
+        gdb gdbHostCpuOnly shaderc
 
         fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
         gnome-tweaks busybox pciutils 
