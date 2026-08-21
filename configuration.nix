@@ -1,6 +1,29 @@
 { config, lib, pkgs, ... }:
 {   
-  # nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    open = true;
+    modesetting.enable = true;
+    powerManagement.enable = true;
+
+    prime = {
+      offload.enable = true;
+      offload.enableOffloadCmd = true;
+      nvidiaBusId = "PCI:1:0:0";
+      intelBusId  = "PCI:0:2:0";
+    };
+  };
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+  environment.variables = {
+    __NV_PRIME_RENDER_OFFLOAD = "1";
+    __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
   # virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
   programs.nix-ld.enable = true;
@@ -61,7 +84,7 @@
 
         fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
         gnome-tweaks busybox-sandbox-shell pciutils yad coreutils gnutar gnused bash
-        wget curl xdg-utils gtk3 gdk-pixbuf glib
+        wget curl xdg-utils gtk3 gdk-pixbuf glib wine
         
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
