@@ -3,6 +3,7 @@
   # nixpkgs.config.allowUnfree = true;
   # virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
+  programs.nix-ld.enable = true;
 
   imports = [
     ./hardware-configuration.nix
@@ -55,19 +56,19 @@
         wayland-scanner libxcb libX11 libXau libXdmcp libXrandr wayland 
         wayland-protocols mesa-demos virtualgl virtualglLib vulkan-validation-layers
         libGL (lib.getDev glfw) libglvnd (lib.getDev libglvnd) glfw3 libgcc gcc
-        gdb gdbHostCpuOnly shaderc
+        gdb gdbHostCpuOnly shaderc glslang
+
 
         fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
-        gnome-tweaks busybox pciutils 
-
-
+        gnome-tweaks busybox-sandbox-shell pciutils yad coreutils gnutar gnused bash
+        wget curl xdg-utils gtk3 gdk-pixbuf glib
         
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
 
         
         telegram-desktop obs-studio krita qbittorrent inkscape element-desktop blender        # etc
-        audacity yt-dlp
+        audacity yt-dlp steam-run-free
       ];
     };
   };
