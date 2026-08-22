@@ -93,7 +93,7 @@
     settings = 
       let GB = 1024 * 1024 * 1024; in # 1GB
       let total_storage = 175 * GB; in # 175GB
-      let if_forty_percent_free__clean_it = total_storage / 100 * 40; in # 175%*40 = 70GB
+      let if_forty_percent_free__clean_it = total_storage / 100 * 5; in # 175%*5 = 8.75GB
       {
       # if storage is less than 40% free in total_storage - clean it!
       min-free = if_forty_percent_free__clean_it;
