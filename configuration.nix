@@ -1,36 +1,15 @@
 { config, lib, pkgs, ... }:
 {   
-  nixpkgs.config.allowUnfree = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    open = true;
-    modesetting.enable = true;
-    powerManagement.enable = true;
-
-    prime = {
-      offload.enable = true;
-      offload.enableOffloadCmd = true;
-      nvidiaBusId = "PCI:1:0:0";
-      intelBusId  = "PCI:0:2:0";
-    };
-  };
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
-  environment.variables = {
-    __NV_PRIME_RENDER_OFFLOAD = "1";
-    __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
-  };
   # virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
   programs.nix-ld.enable = true;
+  networking.networkmanager.enable = true;
 
   imports = [
     ./hardware-configuration.nix
   ];
+
+
 
   boot = {
     loader = {
@@ -39,8 +18,6 @@
     };
   };
 
-  networking.networkmanager.enable = true;
-  
   services = {
     pipewire = {
       enable = true;
@@ -54,20 +31,23 @@
         user = "greeter";
       };
     };
-    
+
     xserver = {
+      videoDrivers = [ "nvidia" ];
       enable = true;
       layout = "us,ru";
       xkbOptions = "grp:alt_shift_toggle";
-      libinput = {
-      	enable = true;
-      };
+      libinput.enable = true;
     };
 
     desktopManager.gnome.enable = true;
     # gnome.gnome-keyring.enable = true;
   };
-  
+
+  nixpkgs.config = { allowUnfree = true; permittedInsecurePackages = [ 
+      "electron-39.8.10"
+    ];
+  };
   users.users = {
     Gabimaru = {
       isNormalUser = true;
@@ -92,7 +72,7 @@
         
         
         telegram-desktop obs-studio krita qbittorrent inkscape element-desktop blender        # etc
-        audacity yt-dlp steam-run-free
+        audacity yt-dlp steam-run-free bitwarden-desktop electron
 
 
         gnomeExtensions.forge
@@ -101,10 +81,7 @@
   };
 
 
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-  };
+  programs.sway = { enable = true; wrapperFeatures.gtk = true; };
 
   nix = {
     gc = {
@@ -122,6 +99,34 @@
       min-free = if_forty_percent_free__clean_it;
     };
   };
+
+  hardware = {
+    nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      open = true;
+      modesetting.enable = true;
+      powerManagement.enable = true;
+
+      prime = {
+        offload.enable = true;
+        offload.enableOffloadCmd = true;
+        nvidiaBusId = "PCI:1:0:0";
+        intelBusId  = "PCI:0:2:0";
+      };
+    };
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+    };
+  };
+
+  environment.variables = {
+    __NV_PRIME_RENDER_OFFLOAD = "1";
+    __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+  };
+
+
 
   system.stateVersion = "26.05";
 }
