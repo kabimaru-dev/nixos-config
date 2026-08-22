@@ -86,12 +86,16 @@
         gnome-tweaks busybox-sandbox-shell pciutils yad coreutils gnutar gnused bash
         wget curl xdg-utils gtk3 gdk-pixbuf glib wine
         
+        
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
-
+        
         
         telegram-desktop obs-studio krita qbittorrent inkscape element-desktop blender        # etc
         audacity yt-dlp steam-run-free
+
+
+        gnomeExtensions.forge
       ];
     };
   };
