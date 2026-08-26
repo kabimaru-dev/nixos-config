@@ -23,14 +23,16 @@
       enable = true;
       pulse.enable = true;
     };
+    
+    displayManager.cosmic-greeter.enable = true;
 
-    greetd = {
-      enable = true;
-      settings.default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd GNOME";
-        user = "greeter";
-      };
-    };
+    # greetd = {
+    #   enable = true;
+    #   settings.default_session = {
+    #     command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd GNOME";
+    #     user = "greeter";
+    #   };
+    # };
 
     xserver = {
       videoDrivers = [ "nvidia" ];
@@ -49,7 +51,7 @@
     ];
   };
   users.users = {
-    Gabimaru = {
+    user = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       packages = with pkgs; [
@@ -75,7 +77,7 @@
         audacity yt-dlp steam-run-free bitwarden-desktop electron
 
 
-        gnomeExtensions.forge
+        gnomeExtensions.forge gnomeExtensions.blur-my-shell
       ];
     };
   };
