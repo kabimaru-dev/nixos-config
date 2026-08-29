@@ -2,7 +2,7 @@
 {   
   # virtualisation.docker.enable = true;
   # security.pam.services.Gabimaru.enableGnomeKeyring = false;
-  programs.nix-ld.enable = true;
+  security.polkit.enable = true;
   networking.networkmanager.enable = true;
 
   imports = [
@@ -18,21 +18,20 @@
     };
   };
 
+
   services = {
     pipewire = {
       enable = true;
       pulse.enable = true;
     };
-    
-    displayManager.cosmic-greeter.enable = true;
 
-    # greetd = {
-    #   enable = true;
-    #   settings.default_session = {
-    #     command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd GNOME";
-    #     user = "greeter";
-    #   };
-    # };
+    greetd = {
+      enable = true;
+      settings.default_session = {
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd GNOME";
+        user = "greeter";
+      };
+    };
 
     xserver = {
       videoDrivers = [ "nvidia" ];
@@ -46,6 +45,7 @@
     # gnome.gnome-keyring.enable = true;
   };
 
+
   nixpkgs.config = { allowUnfree = true; permittedInsecurePackages = [ 
       "electron-39.8.10"
     ];
@@ -55,6 +55,11 @@
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       packages = with pkgs; [
+        # Niri
+        niri alacritty swaylock grim slurp foot cliphist fuzzel mako swaybg 
+        xwayland-satellite xdg-desktop-portal-gnome
+
+
         git gh /* python3 python313Packages.pip pipx */ vscodium nil android-tools            # Develop
         /* androidStudioPackages.stable */ vulkan-tools cmake clang gnumake                   #
         vulkan-headers vulkan-loader pkg-config glfw glm docker nodejs                        #
@@ -83,15 +88,27 @@
   };
 
 
-  programs.sway = { enable = true; wrapperFeatures.gtk = true; };
+  programs = {
+    sway = {
+      enable = true;
+      wrapperFeatures.gtk = true;
+    };
+    niri = {
+      enable = true;
+    };
+    nix-ld.enable = true;
+  };
+
 
   nix = {
+    # i should to change it
     gc = {
       automatic = true;
       dates = "daily";
       options = "--delete-older-than 14d";
     };
     
+    # i should to delete it 
     settings = 
       let GB = 1024 * 1024 * 1024; in # 1GB
       let total_storage = 175 * GB; in # 175GB
@@ -101,6 +118,7 @@
       min-free = if_forty_percent_free__clean_it;
     };
   };
+
 
   hardware = {
     nvidia = {
@@ -121,6 +139,7 @@
       enable32Bit = true;
     };
   };
+
 
   environment.variables = {
     __NV_PRIME_RENDER_OFFLOAD = "1";
