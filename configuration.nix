@@ -1,12 +1,32 @@
 { config, lib, pkgs, ... }:
-{ 
+let
+  portproton-src = builtins.fetchTarball {
+    url = "https://github.com/Redm00use/PortProton-NixOS/archive/main.tar.gz";
+  };
+in
+{
   # Choose WM
   # services.desktopManager.gnome.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
+  # services.xserver.desktopManager.cinnamon.enable = true;
+  # services.xserver.desktopManager.enlightenment.enable = true;
+  services.xserver.windowManager.qtile.enable = true;
+  services.dbus.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+    ];
+  };
 
   # Imports
   imports = [
     ./hardware-configuration.nix
+  ];
+
+  # PortProton
+  nixpkgs.overlays = [
+    (import "${portproton-src}/overlay.nix")
   ];
 
 
@@ -16,6 +36,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
+    kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_uvm" "nvidia_drm" ];
   };
 
 
@@ -26,10 +47,11 @@
       pulse.enable = true;
     };
 
+    # displayManager.ly.enable = true;
     greetd = {
       enable = true;
       settings.default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd GNOME";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd labwc";
         user = "greeter";
       };
     };
@@ -37,8 +59,8 @@
     xserver = {
       videoDrivers = [ "nvidia" ];
       enable = true;
-      layout = "us,ru";
-      xkbOptions = "grp:alt_shift_toggle";
+      xkb.layout = "us,ru";
+      xkb.options = "grp:alt_shift_toggle";
     };
 
     power-profiles-daemon = {
@@ -70,11 +92,26 @@
       packages = with pkgs; [
         # Niri
         niri alacritty kitty swaylock grim slurp foot cliphist fuzzel mako swaybg 
-        xwayland-satellite xdg-desktop-portal-gnome noctalia-shell
+        xwayland-satellite noctalia-shell
 
+        waydroid ollama flameshot balsa labwc hyprland
+        
+        # Python
+        # python314 
+        # python314Packages.huggingface-hub python314Packages.ffmpeg-python 
+        # python314Packages.ffmpeg-progress-yield
+        python313Packages.uv
+        python314Packages.uv
+        uv
+
+        # xdg-desktop-portal-xapp gpu-screen-recorder gpu-screen-recorder-gtk 
+        xdg-desktop-portal-hyprland
 
         # Keyboard
         ibus 
+
+        # Portproton & Steam-Run & Wine &
+        portproton steam-run wine winetricks dxvk wine-staging
 
 
         git gh /* python3 python313Packages.pip pipx */ vscodium nil android-tools            # Develop
@@ -88,8 +125,9 @@
 
         fastfetch gparted pavucontrol tree peazip zip unzip gnome-extension-manager           # Linux
         gnome-tweaks busybox-sandbox-shell pciutils yad coreutils gnutar gnused bash
-        wget curl xdg-utils gtk3 gdk-pixbuf glib wine libinput wev libxkbcommon
-        
+        wget curl xdg-utils gtk3 gdk-pixbuf glib libinput wev libxkbcommon ffmpeg-full
+        mpv gamescope
+
         
         mesa                                                                                  # Drivers
         firefox tor-browser                                                                   # Browsers
@@ -104,21 +142,43 @@
     };
   };
 
-
   # Programs
   programs = {
     sway = {
       enable = true;
       wrapperFeatures.gtk = true;
     };
+
     niri = {
       enable = true;
     };
+
     nix-ld = {
+      enable = true;
+      libraries = with pkgs; [
+        pango cairo
+        glib gtk3 atk gdk-pixbuf
+        freetype libx11 libxcursor libxrandr libxinerama
+        fontconfig libXext libXcomposite
+        wayland libxkbcommon
+        zlib glibc
+        mesa libGL libglvnd
+      ];
+    };
+
+    obs-studio = {
+      enable = true;
+
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-pipewire-audio-capture
+      ];
+    };
+
+    gpu-screen-recorder = {
       enable = true;
     };
   };
-
 
   # Nix
   nix = {
@@ -140,7 +200,6 @@
     };
   };
 
-
   # Hardware
   hardware = {
     nvidia = {
@@ -160,8 +219,11 @@
       enable = true;
       enable32Bit = true;
     };
+    opengl = {
+      enable = true;
+      driSupport32Bit = true;
+    };
   };
-
 
   # Env
   environment = {
@@ -171,6 +233,7 @@
       __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     };
     sessionVariables = {  
+      XDG_SESSION_TYPE = "wayland";
       XKB_DEFAULT_LAYOUT = "us,ru";  
       XKB_DEFAULT_OPTIONS = "grp:alt_shift_toggle";
     };
@@ -183,15 +246,22 @@
 
 
   # Allow Additional Settings
-  # virtualisation.docker.enable = true;
-  # security.pam.services.Gabimaru.enableGnomeKeyring = false;
+  virtualisation.docker.enable = true;
+  # security.pam.services.user.enableGnomeKeyring = false;
   security.polkit.enable = true;
   networking.networkmanager.enable = true;
   hardware.bluetooth.enable = true;
+  services.flatpak.enable = false;
 
   system.stateVersion = "26.05";
 }
 
+####### CURSOR-GNOME #######
+# gsettings set org.gnome.desktop.interface cursor-size 24
+# gsettings set org.gnome.desktop.interface cursor-theme Adwaita
+
+
+####### KEYBOARD-CINNAMON #######
 # gsettings set org.cinnamon.desktop.keybindings.wm switch-input-source "['<Alt>Shift_L']"
 # gsettings set org.cinnamon.desktop.keybindings.wm switch-input-source-backward "['<Shift><Alt>Shift_L']"
 
