@@ -116,6 +116,7 @@ in
         ibus 
 
         nautilus
+        thunderbird
 
         # Portproton & Steam-Run & Wine &
         portproton steam-run wine winetricks dxvk wine-staging
