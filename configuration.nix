@@ -9,15 +9,15 @@ in
   # services.desktopManager.gnome.enable = true;
   # services.xserver.desktopManager.cinnamon.enable = true;
   # services.xserver.desktopManager.enlightenment.enable = true;
-  services.xserver.windowManager.qtile.enable = true;
-  services.dbus.enable = true;
+  # services.xserver.windowManager.qtile.enable = true;
+  # services.dbus.enable = true;
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
-    ];
-  };
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals = with pkgs; [
+  #     xdg-desktop-portal-hyprland
+  #   ];
+  # };
 
   # Imports
   imports = [
@@ -51,7 +51,7 @@ in
     greetd = {
       enable = true;
       settings.default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd labwc";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
         user = "greeter";
       };
     };
@@ -91,18 +91,14 @@ in
       extraGroups = [ "wheel" "input" ];
       packages = with pkgs; [
         # Niri
-        niri alacritty kitty swaylock grim slurp foot cliphist fuzzel mako swaybg 
-        xwayland-satellite noctalia-shell
+        # niri alacritty kitty swaylock grim slurp foot cliphist fuzzel mako swaybg 
+        # xwayland-satellite noctalia-shell
+
+        alacritty kitty foot swaylock swaybg noctalia-shell
 
         waydroid ollama flameshot balsa labwc hyprland
         
-        # Python
-        # python314 
-        # python314Packages.huggingface-hub python314Packages.ffmpeg-python 
-        # python314Packages.ffmpeg-progress-yield
-        python313Packages.uv
-        python314Packages.uv
-        uv
+        python313Packages.uv python314Packages.uv uv
 
         # xdg-desktop-portal-xapp gpu-screen-recorder gpu-screen-recorder-gtk 
         xdg-desktop-portal-hyprland
@@ -166,14 +162,14 @@ in
       ];
     };
 
-    obs-studio = {
-      enable = true;
+    # obs-studio = {
+    #   enable = true;
 
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-pipewire-audio-capture
-      ];
-    };
+    #   plugins = with pkgs.obs-studio-plugins; [
+    #     wlrobs
+    #     obs-pipewire-audio-capture
+    #   ];
+    # };
 
     gpu-screen-recorder = {
       enable = true;
