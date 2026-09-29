@@ -119,6 +119,7 @@ in
         thunderbird
         dotnet-sdk
         dotnet-runtime
+        mono
 
         # Portproton & Steam-Run & Wine &
         portproton steam-run wine winetricks dxvk wine-staging
