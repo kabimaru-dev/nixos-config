@@ -101,7 +101,16 @@ in
         python313Packages.uv python314Packages.uv uv
 
         # xdg-desktop-portal-xapp gpu-screen-recorder gpu-screen-recorder-gtk 
+        
+        # default for OBS
+        xdg-desktop-portal 
+        # Sway
+        xdg-desktop-portal-wlr
+        # Hyprland
         xdg-desktop-portal-hyprland
+
+        # Sway
+        slurp
 
         # Keyboard
         ibus 
