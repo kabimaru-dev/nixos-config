@@ -117,6 +117,7 @@ in
 
         nautilus
         thunderbird
+        dotnet-sdk
 
         # Portproton & Steam-Run & Wine &
         portproton steam-run wine winetricks dxvk wine-staging
