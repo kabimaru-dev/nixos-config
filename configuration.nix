@@ -125,6 +125,7 @@ in
         dotnet-sdk
         dotnet-runtime
         mono
+        libreoffice
 
         # Portproton & Steam-Run & Wine &
         portproton steam-run wine winetricks dxvk wine-staging
